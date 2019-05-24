@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Timeline</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div class="primera sticky-top">
+    <img src="./img/logo.png" alt="" class="segunda mx-auto">
+    <img id="gifLogo" src="./img/logo.gif" alt="" class="segunda mx-auto">
+    <span id="loginID" class="d-none">Bienvenido </span>
+    <span id="logout" class="d-none">Logout </span>
+    <button id="loginBtn" autotype="button" class="btn navbar-btn pr-4" data-toggle="modal" data-target="#modalLogin">Login</button>
+</div>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div id="timeline" class="col-lg-8  offset-lg-2">
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                    <div id="imagenmodal" class="imagen">
+                    </div>
+                    <input id="btnImg" class="btn btn-outline-dark d-none" type="file" accept="image/*" >
+                    <button id="btnCambiar" class="btn btn-outline-dark d-none">Cambiar</button>
+                        <button id="btnEdit" class="btn btn-outline-danger d-none my-4" onclick="editPost()">Edit Post</button>
+                        <button id="btnSave" class="btn btn-outline-success d-none my-4" onclick="savePost()">Save Post</button>
+                    <h3 class="modal-title" id="exampleModalLabel"></h3>
+                </div>
+                <div id="modal-body" class="modal-body">
+                    ...
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<!--    Modal del Login -->
+<!--    <button class="btn btn-outline-dark" data-toggle="modal" data-target="#modalLogin">Login</button>-->
+
+    <div id="modalLogin" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal2">
+                <div id="" class="panel-body mx-auto">
+                    <form class="col-lg-8 py-4 offset-lg-2 bg-light" action="javascript:Login()">
+                        <div class="form-group">
+                            <label for="exampleInputUsuario">Usuario</label>
+                            <input id="usuario" type="text" class="form-control"  placeholder="Usuario">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Contraseña</label>
+                            <input  id="contraseña" type="password" class="form-control" id="exampleInputPassword1" placeholder="Contraseña">
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="btnLogin" class="btn btn-outline-success" onclick="Login()">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <button id="btnPrev" class="btn btn-outline-dark d-inline-block  my-4">Prev</button>
+        <span id="npag">1</span>
+        <button id="btnNext" class="btn btn-outline-dark d-inline-block  my-4">Next</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="./js/main.js"></script>
+</body>
+</html>

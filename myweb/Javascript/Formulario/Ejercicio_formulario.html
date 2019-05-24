@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Prueba de validadion</title>
+	<meta charset="utf-8">
+	<meta name="author" content="Fatima Mariel Hilario">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style type="text/css">
+        body{
+            background-color: #221919;
+        }
+         .card-body {
+             background-color: #221818;
+             width: 100%;
+             margin: 0px;
+         }
+        
+        .btn{
+            background-color: rgba(0, 0, 0, 0.31);
+            color:white;
+            }
+        p{
+            background-color: #504c4c;
+            color:#49b949;
+            margin:0;
+            font-size: 34px;
+           }
+        .demo{
+            color:white;
+        }
+        span{
+            color: #ff312e;
+            font-weight: bold;
+        }
+        #Correcto{
+            background-color: #49b949;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #avisoEmail, #avisoNombre, #Correcto, #avisoApellido, #avisoDirNum, #avisoDirName, #avisoDni{
+            display: none;
+        }
+        p{
+            padding: 5px;
+            text-align: center;
+        }
+        label{
+            color: white;
+        }
+     
+    </style>
+</head>
+<body>
+	<!-- Main Container -->
+	<div id="mainContainer" class="container-fluid">
+		<div class="row justify-content-center mt-3">
+			<div class="col-12 col-sm-10 col-md-8">
+				<div class="card shadow-lg border-black">
+				    <p>Prueba de Validación <spam class="demo">Demo</spam></p>
+					<div class="card-body">
+                        <div class="custom-file">
+                              <form id="Formulario" action="Envio()" method="post" onsubmit="Envio()">
+                                  <div id="Correcto"><b> Enviado </b> el formulario es válido </div>
+                                    <div class="form-group">
+                                         <label for="Nombre" style="color: white;">Nombre:</label>
+                                         <input id="Nombre" type="text" class="form-control">
+                                         <span id="avisoNombre">Especifica un nombre (solo letras y espacios están permitidos) </span>
+                                    </div>
+                                  <div class="form-group">
+                                      <label for="Apellido" style="color: white;">Apellido:</label>
+                                      <input id="Apellido" type="text" class="form-control">
+                                      <span id="avisoApellido">Especifica un Apellido (solo letras y espacios están permitidos) </span>
+                                  </div>
+                                    <div class="form-group">
+                                        <label for="Email" style="color: white;">Email:</label>
+                                        <input id="Email" type="email" class="form-control">
+                                        <span id="avisoEmail">Especifica una dirección de email válida</span>
+                                    </div>
+                                  <div class="form-group">
+                                      <label for="Dni" style="color: white;" class="d-block">DNI:</label>
+<!--                                      <select name="tipoDocumento" form="Formulario" class="">-->
+<!--                                          <option value="Nif">NIF</option>-->
+<!--                                          <option value="Nie">NIE</option>-->
+<!--                                      </select>-->
+                                      <input id="Dni" type="text" class="input-group-append d-inline"><br>
+                                      <span id="avisoDni">Especifica un número de identificación válido </span>
+                                  </div>
+                                    <div class="form-group">
+                                        <label for="" class="d-block">Direccion: </label>
+                                        <select id="Via" name="Via" form="Formulario" class="">
+                                            <option value="calle">Calle</option>
+                                            <option value="avenida">Avenida</option>
+                                        </select>
+                                        <input id="dirName" type="text" placeholder="Nombre de via" class="input-group-append d-inline">
+                                        <input id="dirNum" type="number" placeholder="Número" class="input-group-append d-inline"><br>
+                                        <span id="avisoDirNum" class="">Especifica un número de dirección válida<br></span>
+                                        <span id="avisoDirName" class="">Especifica una dirección válida<br></span>
+                                    </div>
+                                <button type="button" class="btn border" onclick="Envio()">Enviar</button>
+                              </form>
+                            <div id="modalDatos" tabindex="-1" class="modal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content" style="margin-top: 50%; top: 50%;">
+                                        <div class="modal-title text-center">
+                                           <h2>Datos Recogidos</h2>
+                                        </div>
+                                        <div id="modalBody" class="modal-body">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                     </div>
+                   </div>
+               </div>
+            </div>
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var namePattern = "^[a-z A-Z]{3,30}$";
+        // var ApellidoPattern = "^[a-z A-Z]{3,30}$";
+        var emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
+
+
+        function checkInput(idInput, pattern) {
+            return $(idInput).val().match(pattern) ? true : false;
+        }
+        
+        function Envio(){
+          if(checkInput("#Nombre", namePattern) && checkInput("#Email", emailPattern) && checkInput("#Apellido", namePattern) && parseInt($("#dirNum").val()) > 0 && $("#dirName").val() != ''  && validar_dni_nif_nie($("#Dni").val())) {
+              $("#Correcto").show();
+              setTimeout(function(){
+                  $("#Correcto").hide()},3000);
+
+              // ___ Modal con los datos recogidos
+              $("#modalBody").html("Nombre: "+ $("#Nombre").val()+"<br>");
+              $("#modalBody").append("Apellido: "+ $("#Apellido").val()+"<br>");
+              $("#modalBody").append("Email: "+ $("#Email").val()+"<br>");
+              $("#modalBody").append("DNI: "+ $("#Dni").val()+"<br>");
+              $("#modalBody").append("Direccion: "+ $("#Via").val()+" "+ $("#dirName").val()+" "+$("#dirNum").val()+"<br>");
+              $("#modalDatos").modal('show');
+          }
+          else{
+              $("#Correcto").hide();
+              checkInput("#Nombre", namePattern) ?  $("#avisoNombre").hide() :  $("#avisoNombre").show();
+              checkInput("#Email", emailPattern) ?  $("#avisoEmail").hide() :  $("#avisoEmail").show();
+              checkInput("#Apellido", namePattern) ?  $("#avisoApellido").hide() :  $("#avisoApellido").show();
+
+              //DNI
+              validar_dni_nif_nie($("#Dni").val()) ? $("#avisoDni").hide() : $("#avisoDni").show();
+
+
+              // Direccion
+              parseInt($("#dirNum").val()) < 1  ? $("#avisoDirNum").show() : $("#avisoDirNum").hide();
+              $("#dirName").val() === '' ? $("#avisoDirName").show() : $("#avisoDirName").hide();
+              $("#dirNum").val() === '' ? $("#avisoDirNum").show() : $("#avisoDirNum").hide();
+          }
+        }
+        //Revisa si son validos los valores ingresados cada vez que se produce un cambio
+        $("#Formulario").on("change, keyup", function(){
+            if (checkInput("#Nombre", namePattern))
+                $("#avisoNombre").hide();
+
+            if (checkInput("#Email", emailPattern))
+                $("#avisoEmail").hide();
+
+            if (checkInput("#Apellido", namePattern))
+                $("#avisoApellido").hide();
+
+            if(validar_dni_nif_nie($("#Dni").val()))
+                $("#avisoDni").hide();
+
+            if(parseInt($("#dirNum").val()) > 0)
+                $("#avisoDirNum").hide();
+
+            if($("#dirName").val() != '')
+                $("#avisoDirName").hide();
+
+        });
+
+        function validar_dni_nif_nie(value){
+
+            var validChars = 'TRWAGMYFPDXBNJZSQVHLCKET';
+            var nifRexp = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            var nieRexp = /^[XYZ]{1}[0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/i;
+            var str = value.toString().toUpperCase();
+
+            if (!nifRexp.test(str) && !nieRexp.test(str)) return false;
+
+            var nie = str
+                .replace(/^[X]/, '0')
+                .replace(/^[Y]/, '1')
+                .replace(/^[Z]/, '2');
+
+            var letter = str.substr(-1);
+            var charIndex = parseInt(nie.substr(0, 8)) % 23;
+
+            return validChars.charAt(charIndex) === letter;
+        }
+    </script>
+</body>
+</html>

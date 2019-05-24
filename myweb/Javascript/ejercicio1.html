@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Leo">
+    <meta name="description" content="Indice de proyectos">
+    <meta name="keywords" content="html,css,js,php,etc">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 1</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body class="p-4">
+    <header><a href="/~leo">Volver al índice</a></header>
+    <h1 class="text-center">Primeros pasos con Javascript</h1>
+    <hr>
+    <section class="mx-auto p-3" style="width: 300px; border: 1px blue solid; box-shadow: 1px 1px 10px;">
+        <p>Mi primer párrafo.</p>
+        <button id="aguacate" type="button" class="btn btn-primary d-block mx-auto m-2"  onclick="alert('Hola Mundo!')">
+            Mensaje
+        </button>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        document.getElementById("aguacate").innerText = "Aguacate";
+        document.write('<p>Texto escrito desde Javascript</p>');
+        document.write('<p>Texto escrito desde Javascript 2</p>');
+        document.write("Hola "+ "Adios"+ (5+5));
+        document.write("<br>5"+5);
+        document.write("<br>"+ (5-3));
+        document.write("<br>"+(5*3));
+        document.write("<br>"+(5/3));
+        console.log("Este mensaje es para los desarrolladores");
+
+        var x,y,z;
+        x = 1000;
+        y = 5;
+        z = 0;
+        document.write("<br>el valor de x es: "+x+ "<br>El valor de y es: "+y+"<br>El valor de z es "+z+"<br>La suma de x e y es: "+(x+y));
+
+    </script>
+</body>
+</html>

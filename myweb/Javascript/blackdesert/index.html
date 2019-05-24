@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Black Desert</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        @keyframes movimiento{
+            from {left: 0px;}
+            to {left: 200px;}
+        }
+        #personaje{
+            background-color: transparent;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .animate{
+            animation: movimiento 5s ;
+
+        }
+        #personajesDiv{
+            /*animation: movimiento 5s ;*/
+
+            content:" ";
+            /*background-image: url("./id/4F.png");*/
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 999;
+            right: 250px;
+            overflow-y: hidden;
+        }
+        #personajeBack{
+
+            background-color: transparent;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            /*top: 50px;*/
+        }
+        /*#personajeBack::before {*/
+        #personajesDiv2 {
+            content:" ";
+            height: 100%;
+            width: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            /*top: 50px;*/
+            background-position-y: 50px;
+            /*top: 50px;*/
+            /*left: 150px;*/
+            /*right: 0px;*/
+            filter: grayscale(100%);
+            overflow-y: hidden;
+        }
+        .row{
+            overflow-y: hidden;
+        }
+        .col-6{
+            height: 120vh;
+            /*border: 1px solid black;*/
+            /*height: 120vh;*/
+            /*background-color: aqua;*/
+            /*min-width: 360px;*/
+            /*z-index: 1010;*/
+            /*overflow: visible !important;*/
+        }
+        #matriz{
+            max-width: 510px;
+            min-width: 510px;
+            z-index: 1000;
+        }
+        #matriz div{
+            filter: grayscale(100%);
+        }
+        #matriz div:hover{
+            cursor: pointer;
+        }
+        #button{
+            width: 50px;
+            height:50px;
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            border: 1px solid black;
+            font-weight: bolder;
+
+            z-index: 1000;
+        }
+        #button:hover{
+            cursor: pointer;
+        }
+        #descripcion {
+            /*height: 30vh;*/
+            font-size: 14px;
+            line-height: 33px;
+            color: #626262;
+            font-family: "Marcellus";
+            max-width: 510px;
+            min-width: 510px;
+        }
+        .container-fluid{
+            background-image: url("./id/fondo.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 120vh;
+            padding-top: 20px;
+        }
+        #icono{
+            background-image: url("./id/17L.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 80px;
+            height: 80px;
+            line-height: 1.5;
+        }
+        @font-face {
+            font-family: "Marcellus";
+            font-style: normal;
+            font-weight: 400;
+            src: url("https://fonts.gstatic.com/s/marcellus/v6/wEO_EBrOk8hQLDvIAF81VvoK.woff2") format("woff2");
+        }
+        #name{
+            font-family: 'Marcellus',serif;
+            font-size: 60px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class=" col-10 offset-2 texto">
+                            <span id="icono" class="d-inline-block"></span>
+                                <div id="name" class="d-inline-block"></div>
+                            <p id="descripcion">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row extra">
+                        <div id="matriz" class="col-10 offset-2 "></div>
+                    </div>
+                </div>
+                <div  class="col-6">
+                    <div id="personajesDiv">
+                        <div id="personaje"></div>
+                    </div>
+                    <div id="personajesDiv2">
+                        <div id="personajeBack"></div>
+                    </div>
+
+                    <input id="button" type="button" class="btn btn-dark" value=">" onclick="imgSwitch()">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+ var matriz = document.getElementById("matriz");
+ matriz.style.width = "510px";
+
+var cont = 1;
+var ruta = "";
+var selected = 17;
+var frontImg = true;
+var texto = new Array(17);
+var nombre = new Array(17);
+
+nombre = ["Dark Knight","Striker","Mystic","Warrior","Sorceress","Ranger","Berserker","Tamer","Ninja","Musa","Maehwa","Valkyrie","Wizard","Witch","Kunoichi","Lahn","Archer"];
+
+texto[0] = "Dark Knights fight with the Kriegsmesser and magic. They tend to spring up at an enemy and strikes blows with the fearsome Kriegsmesser. They can use magic for mid- and long-distance for more damage. After Awakening, they can use the Vediant to freely switch between close and ranged attacks.\n";
+texto[1] = "Strikers are hand-to-hand combatants who attained their skills through countless street brawls. From heavy punches to powerful kicks, their martial arts skills are matchless. After Awakening, they can use the Gardbrace on their both arms, and can also summon Echo Spirits to ambush their enemies from all sides.";
+texto[2] = "Mystics are hand-to-hand combatants who attained their skills after countless years training in the East. From heavy punches to powerful kicks, their martial arts skills are matchless and elegant. After Awakening, they can channel the aura of the Sea Dragon to deliver powerful blows with the pair of Cestus on their arms.";
+texto[3] = "Warriors are skilled fighters with both good attack and defense. Using the Sword and Shield as their main weapons, they are the best weapon-wielders among all the classes. During battle, Warriors will show off their fearlessness with storm-like barrage of melee combat moves. After Awakening, they use two-handed Great Swords to deliver devastating blows to their enemies.";
+texto[4] = "Sorceresses can effectively control the battlefield with dark magic by using both melee and ranged attacks. They lure enemies with ranged magic and lead them to a chaos and painful demise once they come closer. Other races revere and fear the Sorceresses. After Awakening, they can use dark magic shroud themselves in darkness, and use a giant Scythe to cut down their enemies.";
+texto[5] = "Rangers are the specialists of ranged archery attacks. Under the grace of the Sylphs, Rangers present swift movement in any situation of battle. Most of their skills are based on preventing enemies' attempt of melee approach. The Sylph's mystic power is the source of their ability. After Awakening, they can wield the Kamasylven Sword to use melee type attacks.";
+texto[6] = "Berserkers wield monstrous double-axes as big as their own bodies. Berserkers overwhelm their enemies with their size and outrageous strength, annihilating them with ease. Although their physique makes them slow-moving, improved skills will compensate for that. After Awakening, they can use the Iron Buster to send powerful blasts at the enemy, almost like a small portable cannon.";
+texto[7] = "Tamers can fight enemies at any range. With the support of Heilang, the divine beast, Tamers can perform ruthless combination attack with Heilang, or take the enemy down themselves while borrowing the divine force from the beast. After Awakening, they can use the Celestial Bo Staff to channel the divine power as the true master of Heilang.";
+texto[8] = "Ninjas use sword, martial arts, and Ninjutsu. The swarm of attacks consisting of swift movement, smoke shells, and unique skills such as hiding and pulling the enemy into the middle of total chaos. With proper control, a Ninja can flip the battle by discreetly raiding important figures. After Awakening, they can use the Sura Katana to attack their enemies before they even realize what’s hit them.";
+texto[9] = "Musas fight with oriental-style martial arts and with the blade and horn bow. Musas are specialists in 1-on-1 showdowns, since their fast and precise attack combos can target enormous amount of damage at once. After Awakening, they can use the Crescent Blade to swiftly slice through their enemies.";
+texto[10] = "Maehwas fight with oriental-style martial arts and with the blade and horn bow. Maehwas are specialists in 1-on-1 showdowns, since their fast and precise attack combos can target enormous amount of damage at once. After Awakening, they use the Kerispear to deliver lethal stabs.";
+texto[11] = "Valkyries are armed with sword, shield, and divine magic. They can use their weapons to powerful blows to their enemies. They can also use their divine magic for healing and empowering allies. After Awakening, they can use Lancia, a weapon that is even taller than a Valkyrie and greatly boosts her great offense and defense.";
+texto[12] = "Wizards are known for their prudence in battle. In exchange for the casting time delay, they can perform large-scale magical attacks. Their thorough moves can burn, freeze and shatter their enemies with the power of natural elements such as fire, ice, wind, lightning, and earth. After Awakening, they can use the Godr Sphera to gain even greater control over fire and water to can even summon the Water and Fire Guardians.";
+texto[13] = "Witches are known for their prudence in battle. In exchange for the casting time delay, they can perform large-scale magical attacks. Their thorough moves will burn, freeze and shatter their enemies with the power of natural elements such as fire, ice, wind, lightning, and earth. After Awakening, They can use the Aad Sphera to gain even great control over earth and lightning, and can summon the Earth and Lightning guardians.";
+texto[14] = "Kunoichis use sword, martial arts, and Ninjutsu. Their swarm of attacks consists of swift movement, smoke shells, and unique skills such as hiding and pulling the enemy into the middle of total chaos. With proper control, a Kunoichi can flip the battle by discreetly raiding important figures. After Awakening, they can use the Sah Chakram to attack their enemies before they even realize what’s hit them.";
+texto[15] = "Lahns wield the Noble Sword and Crescent Pendulum. The Noble Sword and Crescent Pendulum are connected by a long cloth or chain, allowing Lahns to freely attack from all directions. Lahns are agile and quick on their feet, and can quickly deliver devastating attacks by swinging their Crescent Pendulum. By careful manipulation of the swinging motion, they can even deliver back attacks with the Crescent Pendulum from the front as well as various combo attacks.";
+texto[16] = "The Archer, one of the sentinels of the sacred tree Kamasylve, uses his crossbow for his stylish ranged attack and skill combos. Unlike other classes, the Archer class will start off with access to both the main weapon (Crossbow) and awakening weapon (Greatbow). ";
+
+
+ var personaje = document.getElementById("personajesDiv");
+ var personajeBack = document.getElementById("personajesDiv2");
+ personaje.style.backgroundImage = "url('./id/"+parseInt(selected)+"F.png')";
+ personajeBack.style.backgroundImage = "url('./id/"+parseInt(selected)+"B.png')";
+
+for(var i = 0; i < 5; i++){
+    for(var j = 0; j < 4; j++){
+        if(cont<=17){
+             document.getElementById("descripcion").innerText = texto[cont-1];
+             document.getElementById("name").innerText = nombre[cont-1];
+            var listElement = document.createElement("div");
+            ruta = "url('./id/"+parseInt(cont)+".png')";
+            listElement.style.backgroundImage = ruta;
+
+            listElement.setAttribute("id", cont);
+            listElement.setAttribute("onclick", "cambio(this.id)");
+            listElement.setAttribute("onmouseover", "hover(this.id)");
+            listElement.setAttribute("onmouseout", "outhover(this.id)");
+            listElement.style.backgroundSize = "cover";
+            listElement.style.height = "90px";
+            listElement.style.width = "90px";
+            listElement.style.display = "inline-block";
+            listElement.style.marginRight = "5px";
+            matriz.appendChild(listElement);
+            if(cont == selected){
+                document.getElementById(selected).style.filter = "grayscale(0%)";
+            }
+            cont++;
+        }
+    }
+}
+function cambio(id){
+    document.getElementById(selected).style.filter = "grayscale(100%)";
+    document.getElementById(id).style.filter = "grayscale(0%)";
+    selected = id;
+
+    personaje.style.backgroundImage = "url('./id/"+parseInt(selected)+"F.png')";
+    personajeBack.style.backgroundImage = "url('./id/"+parseInt(selected)+"B.png')";
+    document.getElementById("name").innerText = nombre[selected-1];
+    document.getElementById("descripcion").innerText = texto[selected-1];
+    document.getElementById("icono").style.backgroundImage = "url('./id/"+parseInt(selected)+"L.png')";
+    if(frontImg == true) {
+        if(selected == 4){
+            personaje.style.right = "650px";
+            personajeBack.style.right = "-350px";
+        }
+
+        else if (selected == 7 || selected == 8 || selected == 9 || selected == 10 || selected == 12 || selected == 13 || selected == 14 || selected == 15) {
+            personajeBack.style.right = "-250px";
+        } else {
+            personajeBack.style.right = "0px";
+
+        }
+    }
+    else{
+        if (selected == 16 || selected == 1 || selected == 2 || selected == 5 || selected == 6) {
+            personaje.style.right = "-250px";
+        } else {
+            personaje.style.right = "0px";
+
+        }
+    }
+
+// FUnciona pero con la imagen incorrecta
+    // var el     = $("#personajesDiv"),
+    //     newone = el.clone(true);
+    // el.before(newone);
+    // $("." + el.attr("class") + ":last").remove();
+
+   // frontImg = true;
+    //imgSwitch();
+}
+function hover(id){
+    document.getElementById(id).style.filter = "grayscale(0%)";
+}
+function outhover(id){
+    if(selected != id)
+        document.getElementById(id).style.filter = "grayscale(100%)";
+}
+function imgSwitch(){
+    if(frontImg == true){
+        personaje.style.filter = "grayscale(100%)";
+        personajeBack.style.filter = "grayscale(0%)";
+        personaje.style.zIndex = 0;
+        personajeBack.style.zIndex = 100;
+
+
+
+            //personajeBack.style.top = "0px";
+            personajeBack.style.backgroundPositionY = "0px";
+
+
+            personaje.style.backgroundPositionY = "50px";
+            personajeBack.style.right = "250px";
+
+
+        if(selected == 16 || selected == 1 || selected == 2 || selected == 5 || selected == 6){
+                personaje.style.right = "-250px";
+            }
+            else if (selected !=4){
+                personaje.style.right = "0px";
+            }
+            else{
+            personaje.style.right = "0px";
+            //personajeBack.style.right = "-350px";
+        }
+
+
+
+        // deberia funcionar con un setTImeout
+        // personaje.classList.remove("animate");
+        // personaje.classList.add("animate");
+
+        // $('#personajesDiv').removeClass().addClass("animate");
+        frontImg = false;
+
+    }
+    else{
+        personaje.style.filter = "grayscale(0%)";
+        personajeBack.style.filter = "grayscale(100%)";
+        personaje.style.zIndex = 100;
+        personajeBack.style.zIndex = 0;
+
+       // personajeBack.style.top = "50px";
+        personajeBack.style.backgroundPositionY = "50px";
+        //personaje.style.top = "0px";
+        personaje.style.backgroundPositionY = "0px";
+        personaje.style.right = "250px";
+
+        if(selected == 4){
+            personaje.style.right = "650px";
+            personajeBack.style.right = "-250px";
+
+           // personaje.style.right = "-0px";
+           // personajeBack.style.right = "250px";
+        }
+        else
+        if(selected == 4 || selected == 7 || selected == 8 || selected == 9 || selected == 10 || selected == 12 || selected == 13 || selected == 14 || selected == 15){
+            personajeBack.style.right = "-250px";
+        }
+        else {
+            personajeBack.style.right = "0px";
+        }
+            frontImg = true;
+    }
+}
+</script>
+</body>
+</html>

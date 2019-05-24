@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Leo">
+    <meta name="description" content="Indice de proyectos">
+    <meta name="keywords" content="html,css,js,php,etc">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 25</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        p{
+            color:white;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<header><a href="/~leo">Volver al índice</a></header>
+<h1 class="text-center">Ejercicio de mes con switch</h1>
+<hr>
+<form action="javascript:Ejecuta()" class="p-2 mx-auto mt-4 col-12 col-md-6 col-lg-4 mb-4" style="border:
+1px blue
+solid; box-shadow: 1px 1px 10px;">
+    <div class="form-group">
+        <label for="mes">Mes</label>
+        <input id="mes" class="form-control" type="text">
+    </div>
+    <input type="button" id="boton" class="btn btn-success" name="boton" onclick="Ejecuta()" style="border: 1px solid
+     blue;" value="Mostrar">
+    <div id="resultado" class="mt-3 p-2 mx-auto"
+         style="background-color: black; width: 100%; margin:20px; height: 200px; color: white;"></div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    function Ejecuta(){
+        var mes = parseInt(document.getElementById('mes').value);
+        var resultado = document.getElementById('resultado');
+
+        if(!isNaN(mes)) {
+            switch (mes) {
+                case 1:
+                    resultado.innerText = 'Enero';
+                    break;
+                case 2:
+                    resultado.innerText = 'Febrero';
+                    break;
+                case 3:
+                    resultado.innerText = 'Marzo';
+                    break;
+                case 4:
+                    resultado.innerText = 'Abril';
+                    break;
+                case 5:
+                    resultado.innerText = 'Mayo';
+                    break;
+                case 6:
+                    resultado.innerText = 'Junio';
+                    break;
+                case 7:
+                    resultado.innerText = 'Julio';
+                    break;
+                case 8:
+                    resultado.innerText = 'Agosto';
+                    break;
+                case 9:
+                    resultado.innerText = 'Septiembre';
+                    break;
+                case 10:
+                    resultado.innerText = 'Octubre';
+                    break;
+                case 11:
+                    resultado.innerText = 'Noviembre';
+                    break;
+                case 12:
+                    resultado.innerText = 'Diciembre';
+                    break;
+                default:
+                    resultado.innerText = 'Mes no válido';
+                    break;
+            }
+        }
+        else
+            resultado.innerText = 'Entrada no válida';
+
+    }
+</script>
+</body>
+</html>

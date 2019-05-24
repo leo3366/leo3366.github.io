@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Leo">
+  <meta name="description" content="Indice de proyectos">
+  <meta name="keywords" content="html,css,js,php,etc">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ejercicio 50</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .doble{
+      height: 40%;
+    }
+    .single{
+      height: 20%;
+    }
+    #marco{
+      border-radius: 4px;
+      box-shadow: 2px 2px 5px 5px darkgray;
+      min-width: 375px;
+    }
+    .number{
+      color: lawngreen;
+    }
+    .delete{
+      color: red;
+    }
+    input[type=number]::-webkit-inner-spin-button {
+      opacity: 0
+    }
+    div .border{
+      border-width: 0px !important;
+    }
+    #valor1, #valor2, #operacion{
+     /* display: none !important;*/
+    }
+    .number, .operator, .delete, .igual{
+     /* background-image: radial-gradient(#428bca,#5bc0de);*/
+      box-shadow: inset -2px -2px 2px #000;
+      min-height: 60px;
+      min-width: 60px;
+      font-size: 50px;
+    }
+    .container, #salida{
+      box-shadow:  0 0 10px black;
+      border-radius: 4px;
+      font-size: 50px;
+    }
+  </style>
+</head>
+<body>
+<header><a href="/~leo">Volver al índice</a></header>
+<h1 class="text-center">Calculadora</h1>
+<hr>
+<div id="marco" class="d-block mx-auto col-lg-4 col-md-6 col-sm-8 bg-info p-4">
+<div class="text-right d-block container-fluid">
+  <label id="valor1" class=" inline-flex d-none"></label>
+  <label id="operacion" class=" inline-flex"></label>
+  <label id="valor2" class=" inline-flex"></label>
+</div>
+
+
+  <input id="salida" type="text" class="d-block container-fluid my-4 text-right" value="0" disabled>
+  <div class="container bg-dark">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-4 btn btn-info border delete" onclick="Clear()">C</div>
+          <div class="col-4 btn btn-info border operator" onclick="Opera(this.innerText)">/</div>
+          <div class="col-4 btn btn-info border operator" onclick="Opera(this.innerText)">*</div>
+        </div>
+        <div class="row">
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">9</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">8</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">7</div>
+        </div>
+        <div class="row">
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">6</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">5</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">4</div>
+        </div>
+        <div class="row">
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">1</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">2</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">3</div>
+        </div>
+        <div class="row">
+          <div class="col-8 btn btn-info border number" onclick="numero(this.innerText);">0</div>
+          <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">.</div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="row single">
+          <div class="col-12 btn btn-info border operator" onclick="Opera(this.innerText)">-</div>
+        </div>
+        <div class="row doble">
+          <div class="col-12 btn btn-info border operator" onclick="Opera(this.innerText)">+</div>
+        </div>
+        <div class="row doble">
+          <div class="col-12 btn btn-info border igual" onclick="Resultado()">=</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  var salida = document.getElementById("salida");
+  var valor1 = 0;
+  var valor2 = 0;
+  var operacion = "";
+  var mostrando_resultado = false;
+  var negativo = false;
+  var float = false;
+  var hay_buffer = false;
+
+  // ------------------------------ FUNCION NUMBER -------------------------------------------------------
+  function numero(number){
+    if(mostrando_resultado == false){
+      if(hay_buffer == false){ // Si no hay buffer limpiamos la pantalla
+        salida.value = "";
+      }
+      if(negativo == true && salida.value == ""){ // agregamos el negativo
+        salida.value = "-";
+        negativo = false;
+        hay_buffer = true;
+      }
+      // Si el numero ingresado es un 0
+      if(number == 0)
+        if (!hay_buffer || salida.value == "0")
+          salida.value = number;
+        else
+          salida.value += number;
+
+      // Si el número es o no es el punto decimal
+      if(number != "."){
+        if(number != 0)
+          if(salida.value == "0")
+            salida.value = number;
+          else
+            salida.value += number;
+      }
+      // Si el numero no es ni un 0 ni un punto
+      else if(float == false && salida.value.indexOf(".") < 0){
+        if(salida.value == "0" || salida.value == "")
+          salida.value = 0;
+        else if (salida.value == "-")
+          salida.value += 0;
+        salida.value += number;
+        float = true;
+      }
+    }
+
+    else { // Si no está mostrando un resultado sobreescribe el valor que se muestra por pantalla
+      if(number != "."){
+        if(negativo == false)
+          salida.value = parseFloat(number);
+        else{
+          salida.value = "-"+parseFloat(number);
+          negativo = false;
+        }
+      }
+
+      else if(negativo == true)
+        salida.value = "-0.";
+      else
+        salida.value = "0.";
+      mostrando_resultado = false;
+    }
+    hay_buffer = true;
+  }
+
+  // ------------------------------ FUNCION CLEAR -------------------------------------------------------
+  function Clear() {
+    salida.value = "0";
+    valor1 = 0;
+    valor2 = 0;
+    float = false;
+    negativo = false;
+    hay_buffer = false;
+    operacion = "";
+    mostrando_resultado = false;
+    document.getElementById("valor1").innerText = "";
+    document.getElementById("operacion").innerText = "";
+    document.getElementById("valor2").innerText = "";
+
+  }
+
+  // ------------------------------ FUNCION RESULTADO -------------------------------------------------------
+  function Resultado(){
+    if(valor2 == 0 &&  hay_buffer){
+      valor2 = parseFloat(salida.value);
+      document.getElementById("valor2").innerText = valor2;
+    }
+    if(operacion != "" ){
+      switch (operacion) {
+        case "+":
+          salida.value = valor1 + valor2;
+          mostrando_resultado = true;
+          break;
+        case "-":
+          salida.value = valor1 - valor2;
+          mostrando_resultado = true;
+          break;
+        case "/":
+          if(valor2 == 0)
+            salida.value = "Indeterminado";
+          else
+            salida.value = valor1 / valor2;
+          mostrando_resultado = true;
+          break;
+        case "*":
+          salida.value = valor1 * valor2;
+          mostrando_resultado = true;
+      }
+      valor1 = parseFloat(salida.value);
+      document.getElementById("valor1").innerText = valor1;
+      float = false;
+    }
+  }
+
+  // ------------------------------ FUNCION OPERA -------------------------------------------------------
+  function Opera(operador){
+    if(float == true) // Si Estaban bloqueados los puntos decimales los habilitamos de nuevo
+      float = false;
+    if(hay_buffer == false){ // Si no hay un valor en pantalla pendiente de almacenar
+      if(operador == "-" && (valor1 == 0 || operacion != "")) // Verificamos si se ingresara un número negativo
+        if(negativo == false)
+          negativo = true;
+        else
+          negativo = false;
+      else{
+        operacion = operador;
+        document.getElementById("operacion").innerText = operacion;
+      }
+    } // Fin si no hay nuevas entradas en pantalla
+    else{
+      hay_buffer = false;
+      if(valor1 == 0){
+        valor1 = parseFloat(salida.value);
+        document.getElementById("valor1").innerText = valor1;
+        operacion = operador;
+        document.getElementById("operacion").innerText = operacion;
+      }
+      else if(valor2 == 0){
+        valor2 = parseFloat(salida.value);
+        document.getElementById("valor2").innerText = valor2;
+        Resultado();
+        operacion = operador;
+        document.getElementById("operacion").innerText = operacion;
+        valor2 = 0;
+        document.getElementById("valor2").innerText = "";
+      }
+      else if (mostrando_resultado == false){
+        valor2 = parseFloat(salida.value);
+        document.getElementById("valor2").innerText = valor2;
+        Resultado();
+        operacion = operador;
+        document.getElementById("operacion").innerText = operacion;
+        valor2 = 0;
+        document.getElementById("valor2").innerText = "";
+      }
+      else{
+        operacion = operador;
+        document.getElementById("operacion").innerText = operacion;
+        valor2 = 0;
+        document.getElementById("valor2").innerText = "";
+      }
+    }
+  }
+</script>
+</body>
+</html>

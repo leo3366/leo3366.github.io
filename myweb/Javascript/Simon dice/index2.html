@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon dice</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style>
+
+        * {
+            -moz-box-sizing:border-box; box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box;
+            --color2: #696969;
+            --radio: 320px;
+            --radio-borde: 360px;
+            --radio-color: 150px;
+            --radio-centro: 120px;
+        }
+        #simon {
+            width: var(--radio);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% ,-50%);
+            /*border: 30px solid gray;*/
+        }
+        #simon .color {
+            width: var(--radio-color);
+            height: var(--radio-color);
+            float:left;
+            margin:5px;
+            opacity:0.5;
+        }
+        #simon .color:hover {
+            /*border:5px solid #000;*/
+            box-shadow: 0 0 10px white;
+            cursor:pointer;
+        }
+
+        .showColor
+        {opacity:1!important;
+        }
+
+        #verde {
+            /*background-color:green;*/
+            background: radial-gradient(white 10%,green);
+            border-top-left-radius: 100%;
+        }
+        #rojo {
+            /*background-color:red;*/
+            background: radial-gradient(white 10%,red);
+
+            border-top-right-radius: 100%;
+        }
+        #amarillo {
+            /*background-color:yellow;*/
+            background: radial-gradient(white 10%,yellow);
+
+            border-bottom-left-radius: 100%;
+        }
+        #azul {
+            /*background-color:blue;*/
+            background: radial-gradient(white 10%,blue);
+
+            border-bottom-right-radius: 100%;
+        }
+
+        #verde:active {
+            opacity:1!important;
+        }
+        #rojo:active {
+            opacity:1!important;
+        }
+        #amarillo:active {
+            opacity:1!important;
+        }
+        #azul:active {
+            opacity:1!important;
+        }
+
+        #mensaje {
+            margin-top:20px;
+            color: aliceblue;
+        }
+
+        #centro{
+            position: absolute;
+            height: var(--radio-centro);
+            width: var(--radio-centro);
+            border: 10px solid var(--color2);
+            background-color: rgba(0,0,0,1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% ,-50%);
+            border-radius: 100%;
+        }
+        body{
+            background-color: black;
+            height: 100vh;
+        }
+        #border{
+            background-color: var(--color2);
+            width: var(--radio-borde);
+            height: var(--radio-borde);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% ,-50%);
+            border-radius: 100%;
+        }
+        #movimientos{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% ,-50%);
+            font-size: 80px;
+            color: var(--color2);
+        }
+        #tablero{
+            position: relative;
+        }
+        #boton{
+            margin-bottom: 20px;
+            float: left;
+        }
+        #dificultad{
+            float: right;
+            margin-bottom: 20px;
+            width: 30px;
+        }
+        h2{
+            color: var(--color2);
+        }
+    </style>
+</head>
+<body>
+<header class="text-center">
+    <h2>Simon dice</h2>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <div class="offset-2">
+            <div class="tablero">
+                <div id="border">
+                    <div id="simon">
+                        <div class="color" id="verde"></div>
+                        <div class="color" id="rojo"></div>
+                        <div class="color" id="amarillo"></div>
+                        <div class="color" id="azul"></div>
+                        <div id="centro" class="text-center">
+                            <div id="movimientos">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-3 col-6 pt-4" style="position: absolute; bottom: 0;">
+            <button id="boton" class="btn btn-dark">Start game!</button>
+            <input id="dificultad" type="text" value="1">
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-3 col-6 pt-4" style="position: relative; bottom: 0;">
+            <div id="mensaje" style="background-color: rgba(0,0,0,0.5)"></div>
+        </div>
+    </div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+
+<script>
+    // historial contendra un array con los colores a pulsar
+    var historial=Array();
+
+    // pulsado contendra un array con los valores pulsados por el usuario
+    var pulsado=Array();
+
+    // esta variable define cuando el usuario puede empezar a jugar
+    var jugando=false;
+
+    // Variables de audio
+    var audioGreen = document.createElement('audio');
+    audioGreen.setAttribute('src','audio/simonSound1.mp3');
+    var audioRed = document.createElement('audio');
+    audioRed.setAttribute('src','audio/simonSound2.mp3');
+    var audioYellow = document.createElement('audio');
+    audioYellow.setAttribute('src','audio/simonSound3.mp3');
+    var audioBlue = document.createElement('audio');
+    audioBlue.setAttribute('src','audio/simonSound4.mp3');
+
+    var nMov = 1;
+
+    $(document).ready(function(){
+
+        // Evento que se ejecuta cuando se pulsa el botón para empezar a jugar
+        $("#boton").click(function(){
+            if($("#dificultad").val() > 0 && $("#dificultad").val() <= 10)
+                nMov = $("#dificultad").val();
+            else{
+                $("#dificultad").val(1);
+                nMov = 1;
+            }
+
+            // inicializamos el array del historial
+            historial=Array();
+
+            // Indicamos que inicie un nuevo movimiento
+            nuevoMovimiento();
+        });
+
+        // Evento que se ejecuta cuando se pulsa sobre uno de los cuadros
+        $("#simon div").click(function(){
+            // console.log($(this).attr('id'));
+
+            if(jugando)
+            {
+
+                // Añadimos la pulsacion al array pulsado
+                pulsado.push($(this).index());
+
+                // Verificamos que nuestra pulsacion sea correcta
+                // Esta funcion nos devuelve:
+                //  1 Todos los colores pulsados son correctos y hay que mostrar un nuevo color
+                //  2 Todos los colores pulsados son correctos pero todavia falta pulsar mas colores
+                //  0 Ha habido un error
+                verificacion=verificarPulsacion();
+
+                if(verificacion==1)
+                {
+                    // Todo va bien, añadimos un nuevo movimiento
+                    nuevoMovimiento();
+                }else if(verificacion==0){
+
+                    // El usuario se ha equivocado, mostraremos el error
+                    mostrarError();
+                }
+            }
+        });
+    });
+
+    /**
+     * Esta funcion genera un nuevo color
+     */
+    function nuevoMovimiento()
+    {
+        jugando=false;
+        $("#mensaje").html("Mostrando los colores...");
+        pulsado=Array();
+        for(var i = 0; i < nMov; i++){
+            var nuevoMovimiento=Math.floor(Math.random()*4);
+            historial.push(nuevoMovimiento);
+        }
+        $("#movimientos").html((parseInt(historial.length)/nMov));
+        mostrarColores(0);
+    }
+
+    /**
+     * Esta funcion muestra todos los colores que el usuario tendra que pulsar
+     * Recibe el indice del array de colores a mostrar
+     */
+    function mostrarColores(indice)
+    {
+        $("#simon div").removeClass("showColor");
+        if(historial[indice]>=0)
+        {
+            if(historial[indice] == 0){
+                console.log("verde");
+                audioGreen.play();
+            }
+            else if(historial[indice] == 1){
+                console.log("rojo");
+                audioRed.play();
+
+            }
+            else if(historial[indice] == 2){
+                console.log("Amarillo");
+                audioYellow.play();
+
+            }
+            else if(historial[indice] == 3){
+                console.log("azul");
+                audioBlue.play();
+
+            }
+
+            $("#simon div:nth-child("+(historial[indice]+1)+")").addClass("showColor");
+            setTimeout(function(){ocultarColores(indice+1)},800);
+        }else{
+            jugando=true;
+            $("#mensaje").html("Ya puedes empezar...");
+        }
+    }
+
+    /**
+     * Esta funcion forma parte del proces de mostrar los colores mostrarColores()
+     * Esconde el color
+     */
+    function ocultarColores(indice)
+    {
+        $("#simon div").removeClass("showColor");
+        setTimeout(function(){mostrarColores(indice)},500);
+    }
+
+    /**
+     * Esta funcion verifica las pulsaciones del usuario
+     * Devuelve:
+     *  1 Todos los colores pulsados son correctos y hay que mostrar un nuevo color
+     *  2 Todos los colores pulsados son correctos pero todavia falta pulsar mas colores
+     *  0 Ha habido un error
+     */
+    function verificarPulsacion()
+    {
+        for(var i=0;i<historial.length;i++)
+        {
+            if(pulsado.length>i)
+            {
+                if(historial[i]!=pulsado[i])
+                {
+                    return 0;
+                }
+            }else{
+                return 2;
+            }
+        }
+        if(pulsado.length==historial.length)
+            return 1;
+        return 2;
+    }
+
+    /**
+     * Esta funcion muestra los colores que se tenia que haber pulsado y los
+     * colores que el usuario ha pulsado
+     */
+    function mostrarError()
+    {
+        var colores=["verde", "rojo", "amarillo", "azul"];
+        var cadenaColores=" | ";
+        var cadenaColoresPulsados=" | ";
+
+        for(var i=0;i<historial.length;i++)
+        {
+            cadenaColores+=colores[historial[i]]+" | ";
+        }
+        for(var i=0;i<pulsado.length;i++)
+        {
+            cadenaColoresPulsados+=colores[pulsado[i]]+" | ";
+        }
+        $("#mensaje").html("Te has equivocado, los colores eran:<br>"+cadenaColores+"<br>y tu has pulsado:<br>"+cadenaColoresPulsados);
+    }
+    $("#verde").click(function () {
+       audioGreen.play();
+    });
+    $("#rojo").click(function () {
+        audioRed.play();
+    });
+    $("#azul").click(function () {
+        audioBlue.play();
+    });
+    $("#amarillo").click(function () {
+        audioYellow.play();
+    });
+</script>
+</body>
+</html>

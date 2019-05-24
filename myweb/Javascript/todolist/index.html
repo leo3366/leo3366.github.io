@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>To-do-list</title>
+    <style>
+        .caja{
+            position: relative;
+        }
+        
+        .borra, .edit{
+            float: right;
+        }
+        
+        .tareas > div:nth-child(even){
+            background-color: bisque;
+        }
+        
+        .tareas > div:nth-child(odd){
+            background-color: aquamarine;
+        }
+    
+    
+    </style>
+</head>
+<body>
+<h1 class="text-center">To-Do-List</h1><hr>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 offset-1 input-group my-2">
+            <input id="texto" type="text" class="form-control" placeholder="Introduzca una tarea"><button class="btn btn-info input-group-append tarea">Add</button>
+        </div>
+    </div>
+    <div class="row border m-4 tareas">
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-body mx-auto">
+                <input type="text" id="areaText" class="bg-info mx-auto"></input>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+    var edicion = false;
+
+    $(".tarea").click(function() {
+        if($("#texto").val().length === 0)
+            alert("vacio");
+        else{
+            $('.tareas').append('<div class="col-10 offset-1 my-1">'+
+            '<span>'+ $("#texto").val() + '</span>' +
+            '<button class="btn btn-danger borra">Remove</button>'+
+            '<button class="btn btn-warning edit">Edit</button>'+
+            '</div>');
+            $('.edit').last().on('click', function(){
+                $('#modal').modal('show');
+                $('#areaText').val($(this).parent().children(':first-child').text());
+                $(this).parent().children(':first-child').addClass('editando');
+            });
+        }
+        $(".borra").click(function() {
+            $(this).parent().remove();
+        });
+        
+    });
+    $('#modal').on('hide.bs.modal',function(){
+        $('.editando').text($('#areaText').val());
+        $('#areaText').val("");
+        $('.editando').removeClass('editando');
+    });
+});
+</script>
+</body>
+</html>

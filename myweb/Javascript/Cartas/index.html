@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>PAREJAS</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Eduardo, Miguel, Leo, Alex">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!-- Own CSS -->
+    <link rel="stylesheet" href="./css/parejas.css" type="text/css">
+
+</head>
+<body>
+    <!-- Main Container -->
+    <div id="myContainer" class="container-fluid">
+        <div class="row justify-content-center ">
+            <div class="col-12 text-center">
+                <h1 id="titulo">PAREJAS</h1>
+            </div> <!-- End Col -->
+            <div id="progressBar" class="progress-bar-striped">
+                <div class="progress">
+                    <progress max="100" value="91"></progress>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center" style="background-color: rgba(0,0,0,0.5);">
+            <span id="nivelActual" class="col-4" style="color: yellow">Nivel</span>
+            <span id="puntaje" class="col-4" style="color: white"></span>
+            <span id="multiplicador" class="col-4" style="color: red">X </span>
+        </div><!-- End Row -->
+<!--        <button id="btnStart" class="btn btn-warning mx-auto d-block my-4 invisible">Reiniciar</button>-->
+        <!-- Puntaje.-->
+
+
+        <!-- First Row Elements for background change-->
+        <div class="row myRow justify-content-center">
+            <div id="1" class="Div1 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id ="2" class="Div2 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="3" class="Div3 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="4" class="Div4 parejas">
+                <div class="fondo"></div>
+            </div>
+        </div> <!-- End Row -->
+
+        <!-- Second Row Elements for background change-->
+        <div class="row myRow justify-content-center">
+            <div id="5" class="Div5 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="6" class="Div6 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="7" class="Div7 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="8" class="Div8 parejas">
+                <div class="fondo"></div>
+            </div>
+        </div> <!-- End Row -->
+
+        <!-- Third Row Elements for background change-->
+        <div class="row myRow row3 justify-content-center">
+            <div id="9" class="Div1 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="10" class="Div2 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="11" class="Div3 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="12" class="Div4 parejas">
+                <div class="fondo"></div>
+            </div>
+        </div> <!-- End Row -->
+		
+		<!-- Third Row Elements for background change-->
+        <div class="row myRow row4 justify-content-center">
+            <div id="13" class="Div5 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="14" class="Div6 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="15" class="Div7 parejas">
+                <div class="fondo"></div>
+            </div>
+            <div id="16" class="Div8 parejas">
+                <div class="fondo"></div>
+            </div>
+        </div> <!-- End Row -->
+        <button id="btnNivel" class="btn btn-success d-block mx-auto" data-toggle="modal" data-target="#modalNivel">Selecciona nivel</button>
+    </div> <!-- End Container -->
+    <div id="bloqueo"></div>
+
+    <div id="modalNivel" class="modal fade" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal2">
+                <div id="" class="panel-body mx-auto justify-content-center text-center p-4">
+                    <h3>Selecciona nivel</h3>
+                    <button class="nivel1 btn btn-success">Fácil</button>
+                    <button class="nivel2 btn btn-success">Medio</button>
+                    <button class="nivel3 btn btn-success">Difícil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalCambio" class="modal fade" tabindex="-1" style="background-color: transparent">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal2" style="background-color: transparent">
+                <div id="padreTitulo" class="panel-body mx-auto justify-content-center text-center p-4" style="background-color: transparent">
+                    <h1 id="tituloNivel">Nivel </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+	<script src="./js/parejas.js"></script>
+</body>
+</html>

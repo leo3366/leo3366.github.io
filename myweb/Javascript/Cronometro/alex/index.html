@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reloj</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style>
+        .col{
+            font-size: 40px;
+            max-width: 60px;
+            color: rgba(15,219,0,0.67);
+            font-family: my-font;
+        }
+        .row{
+            padding: 20px;
+            background-color: black;
+            box-shadow: 2px 2px 10px black;
+            border-radius: 50px;
+            position: absolute;
+            top: 478px;
+            left: 50%;
+/*            transform: translate(15%, 125%);*/
+            max-width: 300px;
+            min-width: 300px;
+            transform: skewY(9deg);
+        }
+        body{
+            background-image: url("./img/despertador.jpg");
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-position-y:  -160px;
+            /*background-position-x: center;*/
+            /*background-size: cover*/
+        }
+
+        @font-face {
+            font-family: my-font;
+            src: url("./font/digital-7.ttf") format("truetype");
+        }
+        .btn{
+            border-radius: 100px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container my-4">
+    <div class="row text-center justify-content-center">
+        <div class="col horas">00</div>
+        <div class="col puntos">:</div>
+        <div class="col minutos">00</div>
+        <div class="col puntos">:</div>
+
+        <div class="col segundos">00</div>
+        <button id="iniciar" class="btn btn-outline-success ml-4">Start</button>
+        <button id="parar" class="btn btn-outline-danger ml-4" disabled>Stop</button>
+        <button id="resetear" class="btn btn-outline-info ml-4" disabled>Reset</button>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        var hora_cliente = new Date();
+        var horas = hora_cliente.getHours();
+        var minutos = hora_cliente.getMinutes();
+        var segundos = hora_cliente.getSeconds();
+        var intervalo = 1000; // un segundo de intervalo
+        var timer;
+
+        $("#iniciar").click(function () {
+            timer = setInterval(play, intervalo);
+            $(this).attr("disabled", true);
+            $("#parar").attr("disabled", false);
+            $("#resetear").attr("disabled", false);
+        });
+        function play(){
+            if(segundos < 59)
+                segundos++;
+            else if(minutos < 59){
+                segundos = 0;
+                minutos++;
+            }
+            else if(horas < 23){
+                segundos = 0;
+                minutos = 0;
+                horas++;
+            }
+            else{
+                segundos = 0;
+                minutos = 0;
+                horas = 0;
+            }
+            $("#resetear").attr("disabled", false);
+            imprimir();
+        }
+        $("#parar").click(function () {
+            timer = clearInterval(timer);
+            $("#parar").attr("disabled", true);
+            $("#iniciar").attr("disabled", false);
+        });
+        $("#resetear").click(function () {
+            horas = 0;
+            minutos = 0;
+            segundos = 0;
+            $("#resetear").attr("disabled", true);
+            imprimir();
+        });
+        function imprimir(){
+                $(".segundos").text(("0"+segundos).slice(-2));
+                $(".minutos").text(("0"+minutos).slice(-2));
+                $(".horas").text(("0"+horas).slice(-2));
+        }
+    });
+    // añadir audio con jquery con la propiedad autoplay,
+    // utilizar diseño digital y diseño analogico,
+</script>
+</body>
+</html>

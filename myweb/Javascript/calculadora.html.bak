@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Leo">
+    <meta name="description" content="Indice de proyectos">
+    <meta name="keywords" content="html,css,js,php,etc">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ejercicio 50</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .doble{
+            height: 40%;
+        }
+        .single{
+            height: 20%;
+        }
+        #marco{
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px 5px darkgray;
+            min-width: 188px;
+        }
+        .number{
+            color: lawngreen;
+        }
+        .delete{
+            color: red;
+        }
+        input[type=number]::-webkit-inner-spin-button {
+            opacity: 0
+        }
+    </style>
+</head>
+<body>
+<header><a href="/~leo">Volver al índice</a></header>
+<h1 class="text-center">Calculadora</h1>
+<hr>
+<div id="marco" class="d-block mx-auto col-4 bg-info p-4">
+    <input id="salida" type="text" class="d-block container-fluid my-4 text-right" value="" disabled>
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <div class="row">
+                    <div class="col-4 btn btn-info border delete" onclick="Clear()">C</div>
+                    <div class="col-4 btn btn-info border operator" onclick="Opera(this.innerText)">/</div>
+                    <div class="col-4 btn btn-info border operator" onclick="Opera(this.innerText)">*</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">9</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">8</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">7</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">6</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">5</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">4</div>
+                </div>
+                <div class="row">
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">1</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">2</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">3</div>
+                </div>
+                <div class="row">
+                    <div class="col-8 btn btn-info border number" onclick="numero(this.innerText);">0</div>
+                    <div class="col-4 btn btn-info border number" onclick="numero(this.innerText);">.</div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row single">
+                    <div class="col-12 btn btn-info border operator" onclick="Opera(this.innerText)">-</div>
+                </div>
+                <div class="row doble">
+                    <div class="col-12 btn btn-info border operator" onclick="Opera(this.innerText)">+</div>
+                </div>
+                <div class="row doble">
+                    <div class="col-12 btn btn-info border igual" onclick="Opera(this.innerText)">=</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var salida = document.getElementById("salida");
+    var valor1 = 0;
+    var valor2 = 0;
+    var operacion = "";
+    var mostrando_resultado = false;
+    var unavez = true; // variable temporal mientras se soluciona
+    var negativo = false;
+    var float = false;
+
+    function numero(number){
+        if(number == 0 && (salida.value === 0 || salida.value === "")){
+                salida.value = 0;
+                return 0;
+        }
+        else if(number == 0 && salida.value.startsWith("0."))
+            salida.value += 0;
+
+        if(valor1 != 0 && operacion != "" && valor2 == 0 && unavez == true){
+            salida.value = "";
+            unavez = false;
+        }
+        if(mostrando_resultado == false){
+            if(negativo == true){
+                salida.value += "-";
+                negativo = false;
+            }
+                if(number != "."){
+                    if(number != 0)
+                        salida.value += number;
+                }
+                else if(float == false && salida.value.indexOf(".") < 0){
+                    if(salida.value == 0 || salida.value == "")
+                        salida.value = 0;
+                    salida.value += number;
+                    float = true;
+                }
+          //  else
+            //    salida.value += number*-1;
+        }
+        else if(mostrando_resultado == true){
+            if(number != ".")
+                salida.value = parseFloat(number);
+            else
+                salida.value = "0.";
+           // valor1 = 0;
+           // valor2 = 0;
+            mostrando_resultado = false;
+        }
+    }
+    function Clear() {
+        salida.value = "";
+        valor1 = 0;
+        valor2 = 0;
+        unavez = true;
+        float = false;
+    }
+    function Resultado(operador){
+       // return parseFloat(valor1 +operador + salida.value);
+        return eval(valor1 +operador + salida.value);
+    }
+    function Opera(operador){
+        if(float == true)
+            float = false;
+        console.log("Valor1: "+valor1+" Valor2: "+valor2+" Operador: "+operador+" Operacion: "+operacion);
+
+        if(valor1 != 0 && salida != "" && mostrando_resultado == false){
+            if(operacion == "/" && salida.value == 0)
+                salida.value = "Can't divide by 0";
+            salida.value  = Resultado(operacion);
+            valor1 = salida.value;
+            console.log(salida.value);
+            if(operador != "=")
+                operacion = operador;
+            mostrando_resultado = true;
+            return 0;
+        }
+        else if(valor1 != 0 && salida == "" && operador != "="){
+            operacion = operador;
+            return 0;
+        }
+        else if(operador == "-" && valor1 == 0 && salida.value == "" && negativo == false){
+            negativo = true;
+            return 0;
+        }
+
+        // Se cambia el simbolo de la operacion si es distinto de igual y no es (-) para el primer dígito
+        if((operador != "=" && (operador != "-" && valor1 == 0) || valor1!=0 && operador!= "=") && valor2 == 0)
+                operacion = operador;
+        else if(operador == "-" && valor1 == 0 && salida.value == "" && negativo == false){
+            negativo = true;
+        }
+        else if(operador == "-" && salida.value != "")
+            operacion = operador;
+    //    else if(negativo == true){
+     //       negativo = false;
+      //  }
+
+        if(valor1 == 0 && negativo == false) {
+            valor1 = parseFloat(salida.value);
+            console.log("Valor1: "+valor1+" Valor2: "+valor2+" Operador: "+operador+" Operacion: "+operacion);
+        }
+        else if(valor2 == 0 && operador == "=" && salida.value != "" || salida.value != "" && mostrando_resultado ==
+            false){
+            if(valor2 == 0)
+                valor2 = parseFloat(salida.value);
+            switch (operacion) {
+                case "+":
+                    salida.value = valor1 + valor2;
+                    mostrando_resultado = true;
+                    break;
+                case "-":
+                    salida.value = valor1 - valor2;
+                    mostrando_resultado = true;
+                    break;
+                case "/":
+                    salida.value = valor1 / valor2;
+                    mostrando_resultado = true;
+                    break;
+                case "*":
+                    salida.value = valor1 * valor2;
+                    mostrando_resultado = true;
+                    break;
+            }
+            console.log("Valor1: "+valor1+" Valor2: "+valor2+" Operador: "+operador+" Operacion: "+operacion);
+            valor1 = parseFloat(salida.value);
+            valor2 = 0;
+        }
+    }
+</script>
+</body>
+</html>

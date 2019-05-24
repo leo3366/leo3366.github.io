@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Prueba de validadion</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Leo">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style type="text/css">
+        body{
+            background-color: #000;
+            padding: 20px;
+        }
+        .card-body {
+            background-color: #fff;
+            color: black;
+            padding: 30px;
+        }
+        .card-header{
+            cursor: pointer;
+            text-align: center;
+            background-color: black;
+        }
+        .card{
+            border: 1px solid white;
+            margin: 1px;
+        }
+        i{
+            float: right;
+            transform: rotate(0);
+            transition: transform 0.5s;
+        }
+        h2{
+            display: inline-block;
+        }
+        .icono{
+            transform: rotate(-180deg);
+            transition: transform 0.5s;
+        }
+
+    </style>
+</head>
+<body>
+<div class="card text-white bg-dark mx-auto" style="max-width: 18rem;">
+    <div class="card-header">
+        <h2>Título 1</h2>
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="card-body">
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+</div>
+<div class="card text-white bg-dark mx-auto" style="max-width: 18rem;">
+    <div class="card-header">
+        <h2>Título 2</h2>
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="card-body">
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium corporis, dolores doloribus esse facere facilis fuga id ipsa iure laudantium magnam magni nobis odio porro possimus quas quod quos sed!</p>
+    </div>
+</div>
+<div class="card text-white bg-dark mx-auto" style="max-width: 18rem;">
+    <div class="card-header">
+        <h2>Título 3</h2>
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="card-body">
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aspernatur dignissimos facere molestiae nobis nulla ratione saepe tempore totam voluptatum. Consequuntur cum fuga, harum obcaecati officia vitae voluptate voluptates voluptatum.</p>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda beatae culpa deleniti dicta ipsa laboriosam odio officia quae recusandae rem! Adipisci cupiditate deleniti doloribus id natus nisi, qui quidem veritatis.</p>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet atque distinctio dolore earum exercitationem, facere ipsam laboriosam libero maxime obcaecati, odit perferendis placeat praesentium quibusdam quo repellat repellendus similique sunt.</p>
+    </div>
+</div>
+<div class="card text-white bg-dark mx-auto" style="max-width: 18rem;">
+    <div class="card-header">
+        <h2>Título 4</h2>
+        <i class="fas fa-chevron-up"></i>
+    </div>
+    <div class="card-body">
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias autem dolorem esse eveniet, fuga impedit molestias nostrum nulla placeat quibusdam, ratione rerum, vitae voluptatibus. Commodi consequuntur eligendi impedit maxime nisi!</p>
+        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At commodi debitis deleniti est quis reprehenderit voluptatum? Architecto at culpa ea eligendi eos eum, ipsam laudantium nobis odit porro quis, rem.</p>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".card-body").hide(); // Ocultamos el body de todos los elementos cards
+        $(".card-text").after("<hr>"); // Añadimos una linea de separacion despues de cada párrafo
+    });
+
+    $(".card-header").click(function () {
+        $(".icono").removeClass("icono");
+        if ($(this).hasClass("selected")){
+            $(".selected").next().slideUp().prev().removeClass("selected");
+        }
+        else{
+            $(".selected").next().slideUp().prev().removeClass("selected");
+            $(this).children().next().addClass("icono");
+            $(this).addClass("selected");
+            $(this).next().slideDown();
+        }
+    });
+
+    $("p").on('mouseenter',function () {
+       $(this).css({
+           fontSize: '20px',
+           color: 'rgba(70,49,140,0.7)'
+    })
+    });
+    $("p").on('mouseleave',function () {
+        $(this).css({
+            fontSize: '18px',
+            color: 'black'
+
+        })
+    });
+</script>
+</body>
+</html>

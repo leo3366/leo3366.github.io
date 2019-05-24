@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cronometro</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <style>
+        .digito{
+            font-size: 100px;
+            /*color: rgba(15,219,0,0.67);*/
+            color: rgba(169, 218, 219, 0.67);
+            font-family: my-font;
+            text-shadow: 0px 0px 15px blue;
+            /*text-align: left;*/
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+            transform: scaleY(1.5);
+            /*width: 100%;*/
+            /*width: 80px;*/
+            /*padding-left: 20px;*/
+        }
+        .puntos{
+            /*width: 30px;*/
+            width: 100%;
+            font-size: 100px;
+            /*color: rgba(15,219,0,0.67);*/
+            color: rgba(169, 218, 219, 0.67);
+            font-family: my-font;
+            text-shadow: 0px 0px 15px blue;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            /*margin-left: 10px;*/
+        }
+        body{
+            background-color: black;
+            /*background-image: url("img/fondo1.jpg");*/
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        @font-face {
+            font-family: my-font;
+            src: url("./font/digital-7.ttf") format("truetype");
+        }
+        .botones{
+            text-align: center;
+            /*padding-bottom: 20px;*/
+        }
+
+        .btn{
+            margin-top: 20px;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            color: white;
+            text-shadow: 4px 4px 5px black;
+            border: 1px double white;
+        }
+        #tiempos{
+            /*margin: 0px;*/
+            /*padding: 0px;*/
+            font-family: my-font;
+            /*transform: scaleY(1.5);*/
+            font-size: 20px;
+            /*line-height: normal;*/
+        }
+        @media only screen and (max-width:600px){
+            body{
+                /*background-image: url("img/despertador.jpg");*/
+                /*background-repeat: no-repeat;*/
+                /*background-size: cover;*/
+                /*background-position: center;*/
+                background-color: black;
+                height: 100vh;
+
+                margin: 0;
+                padding: 0;
+
+            }
+            .btn{
+                height: 100px;
+                width: 100px;
+
+            }
+            .digito{
+                font-size: 60px;
+            }
+            .puntos{
+                font-size: 60px;
+            }
+        }
+        .container-fluid{
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            background-color: rgba(0,0,0);
+
+        }
+        .row {
+            width: 100%;
+            text-align: left;
+            padding: 0;
+            margin: 0;
+            /*min-width: 136px;*/
+            background-color: black;
+        }
+        /*p{*/
+        /*    padding: 0;*/
+        /*    margin: 0;*/
+        /*    !*line-height: 5px;*!*/
+        /*}*/
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row sticky-top">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="digito horas col-2">00</div>
+                <div class="puntos col-1">:</div>
+                <div class="digito minutos col-2">00</div>
+                <div class="puntos col-1">:</div>
+                <div class="digito segundos col-2">00</div>
+                <div class="puntos col-1">:</div>
+                <div class="digito milisegundos col-2">00</div>
+            </div>
+        </div>
+        <div class="col-lg-6 botones">
+            <button id="iniciar" class="btn btn-success">Start</button>
+            <button id="parar" class="btn btn-info" disabled>Pause</button>
+            <button id="resetear" class="btn btn-danger" disabled>Reset</button>
+            <button id="cronometro" class="btn btn-warning" disabled>Split</button>
+        </div>
+    </div>
+<!--    <div class="row">-->
+        <div id="tiempos" class="" style="color: white"></div>
+<!--    </div>-->
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        var hora_cliente = new Date();
+        var horas;
+        var minutos;
+        var segundos;
+        var milisegundos;
+        var intervalo = 10; // un segundo de intervalo
+        var timer;
+        var cronStarted = false;
+        var ultimaVuelta = 0;
+        var mayor = 0;
+        var menor = 9999999;
+        var vueltas = Array();
+
+        horas = 0;
+        minutos = 0;
+        segundos =0;
+        milisegundos = 0;
+        $("#parar").attr("style", "display:none");
+        $("#resetear").attr("style", "display:none");
+        $("#cronometro").attr("style", "display:none");
+
+
+
+
+        $("#iniciar").click(function () {
+            timer = setInterval(play, intervalo);
+            $(this).attr("disabled", true);
+            $(this).attr("style", "display:none");
+
+            $("#parar").attr("disabled", false);
+            $("#parar").attr("style", "display:visible");
+
+            $("#resetear").attr("disabled", false);
+            $("#resetear").attr("style", "display:visible");
+
+            $("#cronometro").attr("disabled", false);
+            $("#cronometro").attr("style", "display:visible");
+            cronStarted = true;
+        });
+        function play(){
+            if(milisegundos < 99)
+                milisegundos++;
+            else if(segundos < 59) {
+                milisegundos = 0;
+                segundos++;
+            }
+            else if(minutos < 59){
+                milisegundos = 0;
+                segundos = 0;
+                minutos++;
+            }
+            else if(horas < 23){
+                milisegundos = 0;
+                segundos = 0;
+                minutos = 0;
+                horas++;
+            }
+            else{
+                milisegundos = 0;
+                segundos = 0;
+                minutos = 0;
+                horas = 0;
+            }
+            $("#resetear").attr("disabled", false);
+            $("#resetear").attr("style", "display:visible");
+            imprimir();
+        }
+        $("#parar").click(function () {
+            timer = clearInterval(timer);
+            $("#parar").attr("disabled", true);
+            $("#parar").attr("style", "display:none");
+
+            $("#iniciar").attr("disabled", false);
+            $("#iniciar").attr("style", "display:visible");
+
+            $("#cronometro").attr("disabled", true);
+            $("#cronometro").attr("style", "display:none");
+
+            cronStarted = false;
+        });
+        $("#resetear").click(function () {
+            horas = 0;
+            minutos = 0;
+            segundos = 0;
+            milisegundos = 0;
+            $("#resetear").attr("disabled", true);
+            $("#resetear").attr("style", "display:none");
+
+            $("#iniciar").attr("disabled", false);
+            $("#iniciar").attr("style", "display:visible");
+
+            $("#cronometro").attr("disabled", true);
+            $("#cronometro").attr("style", "display:none");
+
+            $("#parar").attr("disabled", true);
+            $("#parar").attr("style", "display:none");
+
+            ultimaVuelta = 0;
+            vueltas = [];
+            imprimirVueltas();
+
+            timer = clearInterval(timer);
+            imprimir();
+        });
+        function imprimir(){
+            $(".segundos").text(("0"+segundos).slice(-2));
+            $(".minutos").text(("0"+minutos).slice(-2));
+            $(".horas").text(("0"+horas).slice(-2));
+            $(".milisegundos").text(("0"+milisegundos).slice(-2));
+        }
+        $("#cronometro").click(function () {
+            $("#parar").attr("disabled", false);
+            $("#parar").attr("style", "display:visible");
+
+            if(cronStarted == false){
+                timer = setInterval(play, intervalo);
+                cronStarted = true;
+            }
+            else {
+                var tiempo = (horas * 3600*100 + minutos * 60*100 + segundos*100 + milisegundos) - ultimaVuelta;
+                vueltas.push(tiempo);
+                if (tiempo > mayor)
+                    mayor = tiempo;
+                if (tiempo < menor)
+                    menor = tiempo;
+                imprimirVueltas();
+                ultimaVuelta = horas * 3600*100 + minutos * 60 *100 + segundos*100 + milisegundos;
+            }
+            $(document).scrollTop($(document).height());
+            imprimir();
+        });
+        function imprimirVueltas(){
+
+            $("#tiempos").empty();
+            for(var i = 0; i< vueltas.length; i++){
+                var time = formatTime(vueltas[i]);
+                var salida = "";
+
+                if(vueltas[i] == mayor)
+                    salida += "<p style='color:red; font-size: 20px;'>vuelta "+parseInt(i+1)+": "+time;
+                else if(vueltas[i] == menor)
+                    salida +="<p style='color:green; font-size: 20px;'>vuelta "+parseInt(i+1)+": "+time;
+                else
+                    salida+= "<p style='color: #fff; font-size: 20px;'>vuelta "+parseInt(i+1)+": "+time;
+                if(i > 0){
+                    if(vueltas[i]-vueltas[i-1] > 0)
+                        salida+="<span style='color:red; font-size: 20px;'> "+"(+"+formatTime(vueltas[i]-vueltas[i-1])+")</span></p>";
+                    else
+                        salida+= "<span style='color:green; font-size: 20px;'> "+"(-"+formatTime(vueltas[i]-vueltas[i-1])+")</span></p>";
+                }
+                $("#tiempos").append(salida);
+            }
+            $("#tiempos").append("<span style='color: yellow;'>promedio: "+formatTime(promedio())+"</span>");
+
+        }
+        function formatTime(tiempo) {
+            var resultado = "";
+            var negativo = false;
+
+            if(tiempo < 0 ){
+                negativo = true;
+                tiempo = tiempo*-1;
+            }
+
+            if(tiempo > 3600*100){
+                resultado += parseInt(tiempo/3600*100)+":";
+                tiempo = tiempo%3600*100;
+            }
+            else
+                resultado+= "00:";
+            if(tiempo > 60*100){
+                resultado += parseInt(tiempo/60*100)+":";
+                tiempo = tiempo%60*100;
+                // resultado += parseInt(tiempo)+" segundos ";
+            }
+            else
+                resultado+= "00:";
+            if(tiempo > 100){
+                resultado += parseInt(tiempo/100)+":";
+                tiempo = tiempo%100;
+                resultado += tiempo;
+            }
+            else{
+                resultado+= "00:";
+                resultado += tiempo;
+            }
+            return resultado;
+        }
+        function promedio(){
+            var suma = 0;
+            for(var i=0; i < vueltas.length; i++)
+                suma += vueltas[i];
+            return parseInt(suma/vueltas.length);
+        }
+        window.addEventListener('orientationchange', function ()
+        {
+            if (window.innerHeight > window.innerWidth)
+            {
+                document.getElementsByTagName('body')[0].style.transform = "rotate(0deg)";
+            }
+        });
+    });
+</script>
+</body>
+</html>
