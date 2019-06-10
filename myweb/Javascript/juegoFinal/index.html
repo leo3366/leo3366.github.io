@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Título</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        canvas {
+            background-color: black;
+            border: 1px solid black;
+        }
+        #puntajes{
+            font-weight: bold;
+            font-size: 22px;
+            color: lightgray;
+        }
+        h2{
+            color: white;
+        }
+        #puntuacion{
+            position: absolute;
+            margin-left: 5px;
+        }
+        body{
+            background-color: black;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="puntuacion">
+    <h2>Puntajes:</h2>
+    <div id="puntajes">
+</div>
+
+</div>
+<canvas id="canvas" class="mx-auto d-block" width="600" height="400"></canvas>
+<button id="start" class="mx-auto d-block btn btn-success m-2">Start</button>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="jcanvas.min.js"></script>
+<script>
+    var posX;
+    var posY;
+    var angle = 0;
+    var balas = [];
+    var fps = 60;
+    var targets = [];
+    var xTarget;
+    var yTarget;
+    var cantidad_enemigos = 5;
+    var cantidad_disparos = 10;
+    var tick;
+    var timerEnemigos;
+    var puntos;
+    var vidas;
+    var velX, velY, velocidad;
+    var movingAngle;
+    var intocable;
+
+    KEY_CODES = {
+        32: 'space',
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
+    };
+    ///////---------------------------- EVENTOS TECLAS ------------------------------------------------------
+
+    KEY_STATUS = {keyDown: false};
+    for (code in KEY_CODES) {
+        KEY_STATUS[KEY_CODES[code]] = false;
+    }
+
+    $(window).keydown(function (e) {
+        KEY_STATUS.keyDown = true;
+        if (KEY_CODES[e.keyCode]) {
+            e.preventDefault();
+            KEY_STATUS[KEY_CODES[e.keyCode]] = true;
+        }
+    }).keyup(function (e) {
+        KEY_STATUS.keyDown = false;
+        if (KEY_CODES[e.keyCode]) {
+            e.preventDefault();
+            KEY_STATUS[KEY_CODES[e.keyCode]] = false;
+        }
+    });
+    ///////----------------------------  ------------------------------------------------------
+
+
+    $(document).ready(function () {
+        // localStorage.clear();            Activar para limpiar puntajes
+        $("#puntajes").html(getPoints());
+        $("#start").on("click", function () {
+            $("#puntuacion").hide();
+            Iniciar();
+            goMovie(); // Fondo en movimiento
+        });
+    });
+
+    function Iniciar() {
+        posX = $(window).width() / 2;
+        posY = $(window).height() / 2;
+        angle = 0;
+        balas = [];
+        fps = 60;
+        targets = [];
+        xTarget = 0;
+        yTarget = 0;
+        cantidad_enemigos = 5;
+        cantidad_disparos = 10;
+        clearInterval(tick);
+        clearInterval(timerEnemigos);
+        puntos = 0;
+        vidas = 5;
+        velX = 0;
+        velY = 0;
+        velocidad = 0;
+        movingAngle = 0;
+        intocable = false;
+
+        generarEnemigos();
+        timerEnemigos = setInterval(function () {
+            generarEnemigos();
+        }, 10000);
+
+        tick = setInterval(function () {
+            run();
+            update();
+        }, 1000 / fps);
+        // console.log(targets);
+    }
+
+    function generarEnemigos() {
+        for (var i = 0; i < cantidad_enemigos; i++) {
+            targets.push({
+                Angle: Math.PI / 180 * Math.random() * 360,
+                radio: Math.floor(Math.random() * 50)+10,
+                x: Math.floor(Math.random() * can_w),
+                y: Math.floor(Math.random() * can_h),
+                velocidad: Math.random() * 3
+            }); // Generamos un angulo aleatorio desde el que entrará cada enemigo
+        }
+    }
+
+    function update() {
+        /*PERSONAJE*/
+        $("canvas").clearCanvas(); // Limpiamos la escena para redibujarla
+        if(intocable)
+            $("canvas").drawArc({ // Pintamos el personaje luego de perder una vida
+            fillStyle: 'red',
+            strokeStyle: 'white',
+            strokeWidth: 2,
+            start: 30,
+            end: 330,
+            radius: 20,
+            x: posX,
+            y: posY,
+            shadowBlur: 5,
+            shadowColor: 'lightgreen',
+            rotate: angle
+        }).drawArc({
+            fillStyle: 'black',
+            strokeStyle: 'black',
+            strokeWidth: 1,
+            start: 0,
+            end: 360,
+            radius: 10,
+            x: posX,
+            y: posY,
+            shadowBlur: 5,
+            shadowColor: 'white',
+            rotate: angle
+        });
+        else
+            $("canvas").drawArc({ // Pintamos el personaje
+                fillStyle: 'lightgreen',
+                strokeStyle: 'white',
+                strokeWidth: 2,
+                start: 30,
+                end: 330,
+                radius: 20,
+                x: posX,
+                y: posY,
+                shadowBlur: 5,
+                shadowColor: 'lightgreen',
+                rotate: angle
+            }).drawArc({
+                fillStyle: 'black',
+                strokeStyle: 'black',
+                strokeWidth: 1,
+                start: 0,
+                end: 360,
+                radius: 10,
+                x: posX,
+                y: posY,
+                shadowBlur: 5,
+                shadowColor: 'white',
+                rotate: angle
+            });
+
+
+        $('canvas').drawLine({ // dibujo interior de la nave
+            strokeStyle: '#fff',
+            strokeWidth: 3,
+            rounded: true,
+            startArrow: true,
+            arrowRadius: 15,
+            arrowAngle: 90,
+            x1: posX + Math.sin(Math.PI / 180 * angle), y1: posY + Math.cos(Math.PI / 180 * angle) * -1,
+            x2: posX, y2: posY, //centro de la circunferencia
+            // x3: posX+100, y3: 75
+        });
+
+
+        /*BALAS*/
+        if (balas.length > 0) // Comprobamos si hay balas
+            for (var i = 0; i < balas.length; i++) {
+                $("canvas").drawArc({ // Pintamos las balas
+                    fillStyle: 'white',
+                    strokeStyle: 'black',
+                    start: 0,
+                    end: 360,
+                    radius: 5,
+                    shadowBlur: 16,
+                    shadowColor: 'red',
+                    x: balas[i].x,
+                    y: balas[i].y
+                });
+            }
+        /*ENEMIGOS*/
+        if (targets.length > 0)
+                for (var i = 0; i < targets.length; i++) {
+
+                        $("canvas").drawArc({
+                            fillStyle: 'black',
+                            strokeStyle: 'white',
+                            strokeWidth: 2,
+                            start: 0,
+                            end: 360,
+                            radius: targets[i].radio,
+                            shadowBlur: 35,
+                            shadowColor: 'purple',
+                            x: targets[i].x,
+                            y: targets[i].y
+                        });
+                }
+
+        /**TEXTOS*/
+        $('canvas').drawText({
+            fillStyle: '#fff',
+            strokeStyle: '#000',
+            strokeWidth: 0.5,
+            x: 70,
+            y: 20,
+            fontSize: 20,
+            fontFamily: 'Verdana, sans-serif',
+            text: 'Puntaje: ' + puntos
+        });
+        $('canvas').drawText({
+            fillStyle: '#fff',
+            strokeStyle: '#000',
+            strokeWidth: 0.5,
+            x: can_w - 70,
+            y: 20,
+            fontSize: 20,
+            fontFamily: 'Verdana, sans-serif',
+            text: 'Vidas: ' + vidas
+        });
+        $('canvas').drawText({
+            fillStyle: '#fff',
+            strokeStyle: '#000',
+            strokeWidth: 0.5,
+            x: can_w / 2,
+            y: 20,
+            fontSize: 20,
+            fontFamily: 'Verdana, sans-serif',
+            text: 'Balas: ' + (cantidad_disparos - balas.length)
+        });
+    }
+
+    function shoot() {
+        if (balas.length < cantidad_disparos && KEY_STATUS[KEY_CODES["32"]]) {
+            new Audio("punch.mp3").play();
+            balas.push({x: posX, y: posY, Angle: angle, distance: 600, velx: velX, vely: velY});
+        }
+        KEY_STATUS[KEY_CODES["32"]] = false; // Esto evita que se hagan los disparos simultaneamente
+    }
+
+    function colisiones() {
+        /*Disparos con enemigos*/
+        if (balas.length > 0 && targets.length > 0)
+            for (var i = 0; i < balas.length; i++) {
+                for (var j = 0; j < targets.length; j++) {
+                    if (balas[i] != undefined)
+                        if (distancia(balas[i].x, balas[i].y, targets[j].x, targets[j].y) <= targets[j].radio+5) {
+                            new Audio("woosh.mp3").play();
+                            balas.splice(i, 1);
+                            puntos += Math.floor(100/targets[j].radio);
+                            if(targets[j].radio <= 20) {
+                                targets.splice(j, 1);
+                            }
+                            else{
+                                targets[j].radio /= 2;
+                            }
+                        }
+                }
+            }
+        /*Colision de nave con enemigos*/
+        if (targets.length > 0 && intocable == false)
+            for (var i = 0; i < targets.length; i++)
+                if (distancia(targets[i].x, targets[i].y, posX, posY) <= targets[i].radio+20) {
+                    if (vidas > 0) {
+                        new Audio("death.mp3").play();
+                        posX = $("#canvas").width() / 2;
+                        posY = $("#canvas").height() / 2;
+                        vidas--;
+                        intocable = true;
+                        setTimeout(function () {
+                            intocable = false;
+                        }, 3000);
+                    } else {
+                        savePoints(prompt("Ingresa tu nombre",""),puntos);
+                        targets = [];
+                        balas = [];
+                        clearInterval(timerEnemigos);
+                        clearInterval(tick);
+                        // Iniciar();
+                    }
+                }
+    }
+
+    function distancia(x1, y1, x2, y2) {
+        var a = x1 - x2;
+        var b = y1 - y2;
+
+        var c = Math.sqrt(a * a + b * b);
+        return c;
+    }
+
+    function run() {
+        if (balas.length > 0)
+            for (var i = 0; i < balas.length; i++) {
+                balas[i].x += (Math.sin(Math.PI / 180 * balas[i].Angle) * 5) + balas[i].velx;
+                balas[i].y += (Math.cos(Math.PI / 180 * balas[i].Angle) * -5) + balas[i].vely;
+                if (balas[i].x > can_w)
+                    balas[i].x = 0;
+                if (balas[i].x < 0)
+                    balas[i].x = can_w;
+                if (balas[i].y > can_h)
+                    balas[i].y = 0;
+                if (balas[i].y < 0)
+                    balas[i].y = can_h;
+
+                balas[i].distance -= 5;
+                if (balas[i].distance <= 0)
+                    balas.splice(i, 1);
+            }
+//POSICION DE LA NAVE
+
+        posY += velY;
+        posX += velX;
+
+        if (posX >= can_w)
+            posX = 0;
+        else if (posX <= 0)
+            posX = can_w;
+
+        if (posY >= can_h)
+            posY = 0;
+        else if (posY <= 0)
+            posY = can_h;
+
+
+        if (targets.length > 0)
+            for (var i = 0; i < targets.length; i++) {
+                targets[i].x += Math.sin(targets[i].Angle) * targets[i].velocidad;
+                targets[i].y += Math.cos(targets[i].Angle) * targets[i].velocidad;
+                if (targets[i].x > can_w)
+                    targets[i].x = 0;
+                else if (targets[i].x < 0)
+                    targets[i].x = can_w;
+                if (targets[i].y > can_h)
+                    targets[i].y = 0;
+                else if (targets[i].y < 0)
+                    targets[i].y = can_h;
+            }
+
+        // Acciones si hay teclas pulsadas
+        velocidad = 1;
+
+        if (KEY_STATUS.up) {
+            movingAngle = angle;
+                KEY_STATUS[KEY_CODES['38']] = false;
+                velY += Math.cos(Math.PI / 180 * movingAngle) * -velocidad;
+                velX += Math.sin(Math.PI / 180 * movingAngle) * velocidad;
+                velocidad = Math.sqrt(Math.pow(velY,2)+Math.pow(velX,2));
+        }
+// NO hace falta este evento
+        if (KEY_STATUS.down) {
+                KEY_STATUS[KEY_CODES['40']] = false;
+                velY -= velY/6;
+                velX -= velX/6;
+        }
+
+        if (KEY_STATUS.left)
+            angle -= 6;
+        if (KEY_STATUS.right)
+            angle += 6;
+
+        if (KEY_STATUS.space) {
+            shoot();
+        }
+        colisiones();
+        mouse_ball.x = posX;
+        mouse_ball.y = posY;
+    }
+
+    function savePoints(nombre, puntos){
+        var array = [];
+        var nuevo = {s: puntos+" "+nombre};
+        array.push(nuevo);
+        var stored = JSON.parse(localStorage.getItem("Records"));
+        if(stored != null)
+        for(var i = 0; i < stored.length;i++){
+
+            array.push(stored[i]);
+        }
+        localStorage.setItem("Records",JSON.stringify(array));
+    }
+
+    function getPoints(){
+        var datos = JSON.parse(localStorage.getItem("Records"));
+        if(datos == null)
+            return ;
+         datos.sort();
+         var cadena = "";
+        for(var i = 0; i<datos.length; i++) {
+            cadena += (datos[i].s)+"<br>" ;
+        }
+        return cadena;
+    }
+/* ---------------------------CODIGO DE FONDO--------------------*/
+
+    var canvas = document.getElementById('canvas'),
+        can_w = parseInt(canvas.getAttribute('width')),
+        can_h = parseInt(canvas.getAttribute('height')),
+        ctx = canvas.getContext('2d');
+
+    // console.log(typeof can_w);
+
+    var ball = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            r: 0,
+            alpha: 1,
+            phase: 0
+        },
+        ball_color = {
+            r: 207,
+            g: 255,
+            b: 4
+        },
+        R = 2,
+        balls = [],
+        alpha_f = 0.03,
+        alpha_phase = 0,
+
+// Line
+        link_line_width = 0.8,
+        dis_limit = 260,
+        add_mouse_point = true,
+        mouse_in = false,
+        mouse_ball = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            r: 0,
+            type: 'mouse'
+        };
+
+    // Random speed
+    function getRandomSpeed(pos) {
+        var min = -1,
+            max = 1;
+        switch (pos) {
+            case 'top':
+                return [randomNumFrom(min, max), randomNumFrom(0.1, max)];
+                break;
+            case 'right':
+                return [randomNumFrom(min, -0.1), randomNumFrom(min, max)];
+                break;
+            case 'bottom':
+                return [randomNumFrom(min, max), randomNumFrom(min, -0.1)];
+                break;
+            case 'left':
+                return [randomNumFrom(0.1, max), randomNumFrom(min, max)];
+                break;
+            default:
+                return;
+                break;
+        }
+    }
+
+    function randomArrayItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function randomNumFrom(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    // console.log(randomNumFrom(0, 10));
+
+    // Random Ball
+    function getRandomBall() {
+        var pos = randomArrayItem(['top', 'right', 'bottom', 'left']);
+        switch (pos) {
+            case 'top':
+                return {
+                    x: randomSidePos(can_w),
+                    y: -R,
+                    vx: getRandomSpeed('top')[0],
+                    vy: getRandomSpeed('top')[1],
+                    r: R,
+                    alpha: 1,
+                    phase: randomNumFrom(0, 10)
+                }
+                break;
+            case 'right':
+                return {
+                    x: can_w + R,
+                    y: randomSidePos(can_h),
+                    vx: getRandomSpeed('right')[0],
+                    vy: getRandomSpeed('right')[1],
+                    r: R,
+                    alpha: 1,
+                    phase: randomNumFrom(0, 10)
+                }
+                break;
+            case 'bottom':
+                return {
+                    x: randomSidePos(can_w),
+                    y: can_h + R,
+                    vx: getRandomSpeed('bottom')[0],
+                    vy: getRandomSpeed('bottom')[1],
+                    r: R,
+                    alpha: 1,
+                    phase: randomNumFrom(0, 10)
+                }
+                break;
+            case 'left':
+                return {
+                    x: -R,
+                    y: randomSidePos(can_h),
+                    vx: getRandomSpeed('left')[0],
+                    vy: getRandomSpeed('left')[1],
+                    r: R,
+                    alpha: 1,
+                    phase: randomNumFrom(0, 10)
+                }
+                break;
+        }
+    }
+
+    function randomSidePos(length) {
+        return Math.ceil(Math.random() * length);
+    }
+
+    // Draw Ball
+    function renderBalls() {
+        Array.prototype.forEach.call(balls, function (b) {
+            if (!b.hasOwnProperty('type')) {
+                ctx.fillStyle = 'rgba(' + ball_color.r + ',' + ball_color.g + ',' + ball_color.b + ',' + b.alpha + ')';
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, R, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.fill();
+            }
+        });
+    }
+
+    // Update balls
+    function updateBalls() {
+        var new_balls = [];
+        Array.prototype.forEach.call(balls, function (b) {
+            b.x += b.vx;
+            b.y += b.vy;
+
+            if (b.x > -(50) && b.x < (can_w + 50) && b.y > -(50) && b.y < (can_h + 50)) {
+                new_balls.push(b);
+            }
+
+            // alpha change
+            b.phase += alpha_f;
+            b.alpha = Math.abs(Math.cos(b.phase));
+            // console.log(b.alpha);
+        });
+
+        balls = new_balls.slice(0);
+    }
+
+    // loop alpha
+    function loopAlphaInf() {
+
+    }
+
+    // Draw lines
+    function renderLines() {
+        var fraction, alpha;
+        for (var i = 0; i < balls.length; i++) {
+            for (var j = i + 1; j < balls.length; j++) {
+
+                fraction = getDisOf(balls[i], balls[j]) / dis_limit;
+
+                if (fraction < 1) {
+                    alpha = (1 - fraction).toString();
+
+                    ctx.strokeStyle = 'rgba(150,150,150,' + alpha + ')';
+                    ctx.lineWidth = link_line_width;
+
+                    ctx.beginPath();
+                    ctx.moveTo(balls[i].x, balls[i].y);
+                    ctx.lineTo(balls[j].x, balls[j].y);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+            }
+        }
+    }
+
+    // calculate distance between two points
+    function getDisOf(b1, b2) {
+        var delta_x = Math.abs(b1.x - b2.x),
+            delta_y = Math.abs(b1.y - b2.y);
+
+        return Math.sqrt(delta_x * delta_x + delta_y * delta_y);
+    }
+
+    // add balls if there a little balls
+    function addBallIfy() {
+        if (balls.length < 20) {
+            balls.push(getRandomBall());
+        }
+    }
+
+    // Render
+    function render() {
+        // ctx.clearRect(0, 0, can_w, can_h);
+
+        renderBalls();
+
+        renderLines();
+
+        updateBalls();
+
+        addBallIfy();
+
+        window.requestAnimationFrame(render);
+    }
+
+    // Init Balls
+    function initBalls(num) {
+        for (var i = 1; i <= num; i++) {
+            balls.push({
+                x: randomSidePos(can_w),
+                y: randomSidePos(can_h),
+                vx: getRandomSpeed('top')[0],
+                vy: getRandomSpeed('top')[1],
+                r: R,
+                alpha: 1,
+                phase: randomNumFrom(0, 10)
+            });
+        }
+    }
+
+    // Init Canvas
+    function initCanvas() {
+        canvas.setAttribute('width', $(window).width());
+        canvas.setAttribute('height', $(window).height());
+
+        can_w = parseInt(canvas.getAttribute('width'));
+        can_h = parseInt(canvas.getAttribute('height'));
+    }
+
+    function goMovie() {
+        initCanvas();
+        initBalls(30);
+        window.requestAnimationFrame(render);
+    }
+
+      mouse_in = true;
+      balls.push(mouse_ball);
+</script>
+</body>
+</html>
